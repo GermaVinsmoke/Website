@@ -8,12 +8,15 @@ import {SocialMedia} from 'types/social-media';
 import './OpeningDetails.scss';
 
 const customLinks = {
+  [SocialMedia.discord]: 'https://discord.gg/fdj2EMvSYx',
   [SocialMedia.facebook]: '',
   [SocialMedia.github]: '',
   [SocialMedia.linkedin]: 'https://www.linkedin.com/in/buckyroberts/',
   [SocialMedia.reddit]: 'https://www.reddit.com/message/compose?to=/r/thenewboston',
   [SocialMedia.slack]: '',
+  [SocialMedia.twitch]: '',
   [SocialMedia.twitter]: '',
+  [SocialMedia.youtube]: '',
 };
 
 interface ComponentProps {
@@ -30,7 +33,7 @@ const OpeningDetails: FC<ComponentProps> = ({opening}) => {
       return;
     }
 
-    history.replace('/openings');
+    history.replace(`/openings/${opening.category}`);
   };
 
   const renderApplicationMethodList = (): ReactNode => {
@@ -48,9 +51,7 @@ const OpeningDetails: FC<ComponentProps> = ({opening}) => {
     return (
       <>
         <div className="OpeningDetails__list-label">
-          {rows.length > 1
-            ? 'To apply, send us a message through any of the following channels:'
-            : 'To apply, send us a message through the following channel:'}
+          To apply, leave a message in the #intros channel with the position you are interested in!
         </div>
         <div className="OpeningDetails__application-method-container">{rows}</div>
       </>

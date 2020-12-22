@@ -6,7 +6,7 @@ import './LabelFilter.scss';
 
 interface ComponentProps {
   className?: string;
-  handleLabelClick: Function;
+  handleLabelClick(labelName: string): () => void;
   selectedLabelNames: string[];
 }
 
@@ -22,15 +22,14 @@ const LABEL_COLORS = {
 const LabelFilter: FC<ComponentProps> = ({className, handleLabelClick, selectedLabelNames}) => {
   const renderLabels = () => {
     return Object.entries(LABEL_COLORS).map(([labelName, hexColor]) => (
-      <div key={labelName}>
+      <button className="LabelFilter__button" key={labelName} onClick={handleLabelClick(labelName)}>
         <Label
           className="LabelFilter__label"
           color={selectedLabelNames.includes(labelName) ? hexColor : 'e3e8ee'}
           key={labelName}
-          onClick={handleLabelClick(labelName)}
           name={labelName}
         />
-      </div>
+      </button>
     ));
   };
 

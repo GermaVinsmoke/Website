@@ -5,22 +5,32 @@
 body,
 html {
   margin: 0;
-  overflow: hidden;
   padding: 0;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-primary);
-  font-family: var(--font-family-inter);
+  font-family: var(--font-family-default);
   font-size: var(--font-size-regular);
   line-height: 1.5;
-  max-height: 100vh;
 }
 
-b {
-  font-family: var(--font-family-inter-bold);
-  font-weight: 700;
+#popover-root {
+  position: fixed;
+  top: 0;
+  z-index: 200;
+}
+
+#slide-up-root {
+  bottom: 0;
+  position: fixed;
+  z-index: 150;
+}
+
+b,
+strong {
+  font-weight: 800;
 }
 
 h1,
@@ -46,8 +56,4 @@ ol,
 ul {
   margin: 0;
   padding-inline-start: 32px;
-}
-
-strong {
-  font-family: var(--font-family-inter-bold);
 }

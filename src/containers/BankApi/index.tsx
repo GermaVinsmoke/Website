@@ -1,9 +1,11 @@
 import React, {FC, useMemo} from 'react';
 import {Redirect, useParams} from 'react-router-dom';
 
-import {DashboardLayout, Pagination} from 'components';
+import {DashboardLayout, DocsMenuItems, Pagination} from 'components';
 import {bankApiNavigationData} from 'components/DocsMenuItems';
 import NodeApiConnectionRequests from 'containers/NodeApi/NodeApiConnectionRequests';
+import NodeApiCrawl from 'containers/NodeApi/NodeApiCrawl';
+import NodeApiClean from 'containers/NodeApi/NodeApiClean';
 import {PageData, PageDataObject} from 'types/page-data';
 
 import BankApiAccounts from './BankApiAccounts';
@@ -39,6 +41,10 @@ const pageData: PageDataObject = {
     content: <BankApiBlocks />,
     name: 'Blocks',
   },
+  clean: {
+    content: <NodeApiClean />,
+    name: 'Clean',
+  },
   config: {
     content: <BankApiConfig />,
     name: 'Config',
@@ -50,6 +56,10 @@ const pageData: PageDataObject = {
   'connection-requests': {
     content: <NodeApiConnectionRequests />,
     name: 'Connection Requests',
+  },
+  crawl: {
+    content: <NodeApiCrawl />,
+    name: 'Crawl',
   },
   'invalid-blocks': {
     content: <BankApiInvalidBlocks />,
@@ -74,11 +84,11 @@ const getPageData = (chapter: string): PageData => {
 };
 
 const BankApi: FC = () => {
-  const {chapter} = useParams();
+  const {chapter} = useParams<{chapter: string}>();
   const {content, name} = useMemo(() => getPageData(chapter), [chapter]);
 
   return (
-    <DashboardLayout pageName={name} sectionName="Bank API">
+    <DashboardLayout menuItems={<DocsMenuItems />} pageName={name} sectionName="Bank API">
       {content}
       <Pagination navigationData={bankApiNavigationData} />
     </DashboardLayout>

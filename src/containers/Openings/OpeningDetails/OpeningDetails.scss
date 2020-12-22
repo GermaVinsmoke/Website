@@ -1,3 +1,5 @@
+@import 'src/styles/mixins';
+
 .OpeningDetails {
   $self: &;
   margin: 36px 54px;
@@ -16,6 +18,7 @@
 
   &__application-method-note {
     color: var(--color-sail-gray-500);
+    max-width: 400px;
   }
 
   &__application-method-row {
@@ -48,7 +51,7 @@
   }
 
   &__list-label {
-    font-family: var(--font-family-inter-bold);
+    font-weight: 800;
     margin-top: 24px;
   }
 
@@ -59,8 +62,8 @@
 
   &__position {
     color: var(--color-primary);
-    font-family: var(--font-family-inter-light);
     font-size: 36px;
+    font-weight: 300;
     line-height: 1.25;
     margin-top: 36px;
   }
@@ -72,5 +75,12 @@
 
   @media (max-width: 768px) {
     margin: 16px 24px;
+  }
+
+  @media (max-width: 600px) {
+    &__application-method-note {
+      max-width: 150px;
+      @include word-wrap;
+    }
   }
 }

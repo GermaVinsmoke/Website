@@ -1,28 +1,41 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, ReactNode, useEffect, useState} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import parseISO from 'date-fns/parseISO';
 import intersection from 'lodash/intersection';
 
-import {REPOSITORY_FILTERS} from 'constants/github';
-
-import {BreadcrumbMenu, EmptyPage, FlatNavLinks, LabelFilter, Loader} from 'components';
+import {
+  BreadcrumbMenu,
+  DropdownInput,
+  EmptyPage,
+  FlatNavLinks,
+  Icon,
+  IconType,
+  LabelFilter,
+  Loader,
+  PageTitle,
+} from 'components';
+import {fetchGithubIssues} from 'utils/github';
 import {GenericVoidFunction} from 'types/generic';
 import {Issue, Repository, RepositoryUrlParams} from 'types/github';
-import {fetchGithubIssues} from 'utils/github';
-import {sortByNumberKey} from 'utils/sort';
+import {REPOSITORY_FILTERS} from 'constants/github';
+import {SortBy} from 'types/tasks';
+import {sortByDateKey, sortByNumberKey} from 'utils/sort';
 
 import TasksTask from './TasksTask';
 import './Tasks.scss';
 
-const Tasks = () => {
+const Tasks: FC = () => {
   const history = useHistory();
   const {repository} = useParams<RepositoryUrlParams>();
+  const [dropdownOptions] = useState<string[]>([SortBy.none, SortBy.created, SortBy.reward]);
   const [error, setError] = useState<boolean>(false);
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [repositoryFilter, setRepositoryFilter] = useState<Repository>(Repository.all);
   const [selectedLabelNames, setSelectedLabelNames] = useState<string[]>([]);
+  const [sortByOption, setSortByOption] = useState<string>(SortBy.none);
+  const [sortByOrder, setSortByOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -58,9 +71,21 @@ const Tasks = () => {
             return !!intersection(labelNames, selectedLabelNames).length;
           });
 
-    filteredIssues = filteredIssues.sort(sortByNumberKey('amount', 'desc'));
+    if (sortByOption === SortBy.none) {
+      return filteredIssues;
+    }
+    if (sortByOption === SortBy.reward) {
+      filteredIssues.sort(sortByNumberKey('amount', sortByOrder));
+    }
+    if (sortByOption === SortBy.created) {
+      filteredIssues.sort(sortByDateKey('created_at', sortByOrder));
+    }
 
     return filteredIssues;
+  };
+
+  const handleDropdownChange = (selectedOption: string) => {
+    setSortByOption(selectedOption);
   };
 
   const handleLabelClick = (labelName: string): GenericVoidFunction => (): void => {
@@ -70,17 +95,17 @@ const Tasks = () => {
     setSelectedLabelNames(results);
   };
 
+  const handleSorting = () => {
+    setSortByOrder((order) => (order === 'asc' ? 'desc' : 'asc'));
+  };
+
   const handleNavOptionClick = (option: Repository) => (): void => {
     history.push(`/tasks/${option}`);
   };
 
   const renderFilters = () => (
     <>
-      <FlatNavLinks<Repository>
-        handleOptionClick={handleNavOptionClick}
-        options={REPOSITORY_FILTERS}
-        selectedOption={repository}
-      />
+      <FlatNavLinks handleOptionClick={handleNavOptionClick} options={REPOSITORY_FILTERS} selectedOption={repository} />
       <LabelFilter
         className="Tasks__LabelFilter"
         handleLabelClick={handleLabelClick}
@@ -89,7 +114,7 @@ const Tasks = () => {
     </>
   );
 
-  const renderTasks = () => {
+  const renderTasks = (): ReactNode => {
     const filteredIssues = getFilteredIssues();
     if (error || !filteredIssues.length) return <EmptyPage />;
     return filteredIssues.map(
@@ -114,16 +139,41 @@ const Tasks = () => {
   };
 
   return (
-    <div className="Tasks">
-      <BreadcrumbMenu
-        className="Tasks__BreadcrumbMenu"
-        menuItems={renderFilters()}
-        pageName={repository}
-        sectionName="Tasks"
-      />
-      <div className="Tasks__left-menu">{renderFilters()}</div>
-      <div className="Tasks__task-list">{loading ? <Loader className="Tasks__Loader" /> : renderTasks()}</div>
-    </div>
+    <>
+      <PageTitle title="Tasks" />
+      <div className="Tasks">
+        <BreadcrumbMenu
+          className="Tasks__BreadcrumbMenu"
+          menuItems={renderFilters()}
+          pageName={repository}
+          sectionName="Tasks"
+        />
+        <div className="Tasks__left-menu">{renderFilters()}</div>
+        <div className="Tasks__task-list">
+          <div className="Tasks__sortby-container">
+            {sortByOption !== SortBy.none && (
+              <Icon
+                className="Tasks__sortby-icon"
+                icon={sortByOrder === 'asc' ? IconType.sortAscending : IconType.sortDescending}
+                onClick={handleSorting}
+              />
+            )}
+            <DropdownInput
+              callbackOnChange={handleDropdownChange}
+              defaultOption={SortBy.none}
+              options={dropdownOptions}
+            />
+          </div>
+          {loading ? (
+            <div className="Tasks__loader-container">
+              <Loader />
+            </div>
+          ) : (
+            renderTasks()
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

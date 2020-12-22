@@ -1,7 +1,7 @@
 import React, {FC, useMemo} from 'react';
 import {Redirect, useParams} from 'react-router-dom';
 
-import {DashboardLayout} from 'components';
+import {DashboardLayout, DocsMenuItems} from 'components';
 import {PageData, PageDataObject} from 'types/page-data';
 
 import DeploymentGuideBank from './DeploymentGuideBank';
@@ -28,11 +28,11 @@ const getPageData = (chapter: string): PageData => {
 };
 
 const DeploymentGuide: FC = () => {
-  const {chapter} = useParams();
+  const {chapter} = useParams<{chapter: string}>();
   const {content, name} = useMemo(() => getPageData(chapter), [chapter]);
 
   return (
-    <DashboardLayout pageName={name} sectionName="Deployment Guide">
+    <DashboardLayout menuItems={<DocsMenuItems />} pageName={name} sectionName="Deployment Guide">
       {content}
     </DashboardLayout>
   );

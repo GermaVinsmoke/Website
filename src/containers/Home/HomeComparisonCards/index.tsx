@@ -1,8 +1,7 @@
 import React, {FC, ReactNode} from 'react';
 
 import Bitcoin from 'assets/svgs/bitcoin.svg';
-import Logo from 'assets/svgs/thenewboston.svg';
-import RightArrow from 'assets/svgs/right-arrow.svg';
+import Logo from 'assets/svgs/thenewboston-primary.svg';
 
 import './HomeComparisonCards.scss';
 
@@ -17,17 +16,15 @@ const HomeComparisonCards: FC = () => {
   return (
     <div className="HomeComparisonCards">
       <div className="HomeComparisonCards__card">
-        <img alt="logo" className="HomeComparisonCards__crypto-logo" src={Bitcoin} />
-        {renderComparisonCardStat('txs per second', '7')}
-        {renderComparisonCardStat('avg. tx time', '~5 min')}
-      </div>
-      <div className="HomeComparisonCards__arrow-container">
-        <img alt="right arrow" className="right-arrow" src={RightArrow} />
-      </div>
-      <div className="HomeComparisonCards__card">
         <img alt="logo" className="HomeComparisonCards__crypto-logo" src={Logo} />
         {renderComparisonCardStat('txs per second', '3,238')}
-        {renderComparisonCardStat('avg. tx time', '0.015 seconds')}
+        {renderComparisonCardStat('avg. block time', '0.015 seconds')}
+      </div>
+      <div className="HomeComparisonCards__versus-container">vs</div>
+      <div className="HomeComparisonCards__card">
+        <img alt="logo" className="HomeComparisonCards__crypto-logo" src={Bitcoin} />
+        {renderComparisonCardStat('txs per second', '7')}
+        {renderComparisonCardStat('avg. block time', '10 minutes')}
       </div>
     </div>
   );

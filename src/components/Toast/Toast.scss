@@ -1,6 +1,6 @@
 .Toast {
-  border-left-width: 3px;
   border-left-style: solid;
+  border-left-width: 3px;
   display: flex;
   padding: 12px;
 
@@ -26,7 +26,6 @@
 
   &__text {
     color: var(--color-black);
-    font-family: var(--font-family-inter);
-    font-weight: bold;
+    font-weight: 700;
   }
 }

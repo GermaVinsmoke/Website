@@ -7,7 +7,7 @@ import ValidatorElection from './ValidatorElection.png';
 
 const GuideBanks: FC = () => {
   return (
-    <DocContainer className="GuideBanks" title="Banks">
+    <DocContainer className="GuideBanks" title="Banks" lastUpdated="07 Dec 2020">
       <p>
         Banks play a critical role regarding several aspects of the network. They act as the bond between end users and
         the network and have several responsibilities to each. Regarding network-related responsibilities, banks are
@@ -35,7 +35,7 @@ const GuideBanks: FC = () => {
       <p>
         In addition to the responsibilities to the network, banks also have responsibilities to their users (account
         owners). When users first download account manager applications and create their accounts, they will then select
-        a bank in which they wish to use. They are then able to connect to the network through that bank and may begin
+        a bank which they wish to use. They are then able to connect to the network through that bank and may begin
         sending blocks. Users are able to send blocks through any bank of their choosing at any time. However, due to
         the fact that banks will typically only keep the transaction history of the accounts who have sent transactions
         through them, users will generally use the same bank for extended periods of time.
@@ -62,8 +62,8 @@ const GuideBanks: FC = () => {
         account one by one.
       </p>
       <p>
-        <strong>Important Note:</strong> If and when a bank server goes down, the points of all accounts using that bank
-        will always remain secure. This is because unlike a real-world bank, network banks do not store points. All
+        <strong>Important Note:</strong> If and when a bank server goes down, the coins of all accounts using that bank
+        will always remain secure. This is because unlike a real-world bank, network banks do not store coins. All
         account balances are maintained and updated by the primary validator. Both the root balance sheet and blockchain
         are continuously backed up by several confirmation validators, in the case where the primary validator goes
         down. Banks act simply as routers and initial validation mechanisms to enhance the performance of the network by
@@ -83,7 +83,7 @@ const GuideBanks: FC = () => {
         <li>Users choose their banks</li>
         <li>Banks choose their primary validators</li>
         <li>
-          The banks confirmation validators will tell the bank when to switch primary validators (if/when the primary
+          The bank's confirmation validators will tell the bank when to switch primary validators (if/when the primary
           validator becomes untrustworthy)
         </li>
       </DocList>

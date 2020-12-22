@@ -2,9 +2,7 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 import sub from 'date-fns/sub';
 
-import {REPOSITORY_FILTERS} from 'constants/github';
-
-import {BreadcrumbMenu, EmptyPage, FlatNavLinks, TimeFilter} from 'components';
+import {BreadcrumbMenu, EmptyPage, FlatNavLinks, PageTitle, TimeFilter} from 'components';
 import {
   Contributor,
   ContributorWithTasks,
@@ -16,6 +14,7 @@ import {
   TimeFilterType,
 } from 'types/github';
 import {getContributors, getTasks} from 'utils/data';
+import {REPOSITORY_FILTERS} from 'constants/github';
 import {sortByDateKey, sortByNumberKey} from 'utils/sort';
 
 import LeaderboardContributor from './LeaderboardContributor';
@@ -27,11 +26,11 @@ const timeFilterMap = {
   [Time.all]: null,
 };
 
-const Leaderboard = () => {
+const Leaderboard = (): JSX.Element => {
   const history = useHistory();
   const {repository} = useParams<RepositoryUrlParams>();
   const [repositoryFilter, setRepositoryFilter] = useState<Repository>(repository);
-  const [timeFilter, setTimeFilter] = useState<TimeFilterType>(Time.all);
+  const [timeFilter, setTimeFilter] = useState<TimeFilterType>(Time.days7);
 
   useEffect(() => {
     setRepositoryFilter(repository);
@@ -95,7 +94,7 @@ const Leaderboard = () => {
 
   const renderContributors = () => {
     const contributorsWithTotalEarnings = getContributorsWithTotalEarnings();
-    if (!contributorsWithTotalEarnings.length) return <EmptyPage />;
+    if (!contributorsWithTotalEarnings.length) return <EmptyPage className="Leaderboard__empty-page" />;
     return contributorsWithTotalEarnings
       .sort(sortByNumberKey('total_earnings', 'desc'))
       .map(({account_number, github_avatar_url, github_username, tasks, total_earnings}, index) => (
@@ -113,11 +112,7 @@ const Leaderboard = () => {
 
   const renderNavLinks = (): ReactNode => {
     return (
-      <FlatNavLinks<Repository>
-        handleOptionClick={handleNavOptionClick}
-        options={REPOSITORY_FILTERS}
-        selectedOption={repository}
-      />
+      <FlatNavLinks handleOptionClick={handleNavOptionClick} options={REPOSITORY_FILTERS} selectedOption={repository} />
     );
   };
 
@@ -135,6 +130,7 @@ const Leaderboard = () => {
 
   return (
     <>
+      <PageTitle title="Leaderboard" />
       <div className="Leaderboard">
         {renderTopSections()}
         <div className="Leaderboard__left-menu">{renderNavLinks()}</div>
